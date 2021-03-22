@@ -10,6 +10,7 @@ namespace Project_D.Models
     {
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
+            // KEKW
             String conString = ("User ID=postgres;" +
                                 "Password=none;" +
                                 "Host=localhost;" +
