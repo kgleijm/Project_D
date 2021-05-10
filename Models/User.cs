@@ -3,12 +3,14 @@
 /// <summary>
 /// Summary description for Class1
 /// </summary>
-public class User
+namespace project_D.Models
 {
-	public User()
+	public class User
 	{
-		//
-		// TODO: Add constructor logic here
-		//
+		public int UserID { get; set; }
+		public string UserName { get; set; }
+		public string PassWord { get; set; }
+		public string Email { get; set; }
+		public string IsAdmin { get; set; }
 	}
 }
