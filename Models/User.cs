@@ -11,6 +11,6 @@ namespace project_D.Models
 		public string UserName { get; set; }
 		public string PassWord { get; set; }
 		public string Email { get; set; }
-		public string IsAdmin { get; set; }
+		public int IsAdmin { get; set; }
 	}
 }

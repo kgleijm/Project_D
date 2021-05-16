@@ -24,7 +24,7 @@ namespace Project_D.Migrations.project_D
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("AllData")
+                    b.Property<string>("Date")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("DepartmentID")
