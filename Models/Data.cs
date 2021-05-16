@@ -12,7 +12,7 @@ namespace project_D.Models
 		public float GasConsumption { get; set; }
 		public float EnergySaving { get; set; }
 		public float GasSaving { get; set; }
-		public string Data { get; set; }
+		public string AllData { get; set; }
 		public int DepartmentID { get; set; }
 	}
 }

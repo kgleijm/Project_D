@@ -9,6 +9,14 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+
+
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+
+
 namespace Project_D
 {
     public class Startup
@@ -23,8 +31,16 @@ namespace Project_D
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+
             services.AddControllersWithViews();
+            // String moet zonder spaties en enters aan elkaar worden geplakt!!!
+            services.AddDbContext<project_DContext>(options =>
+                    options.UseSqlServer(Configuration.GetConnectionString("project_DContext")));
+
         }
+
+
+
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
