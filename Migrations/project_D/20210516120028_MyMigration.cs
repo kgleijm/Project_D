@@ -12,11 +12,11 @@ namespace Project_D.Migrations.project_D
                 {
                     DataID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    EnergyConsumption = table.Column<float>(type: "real", nullable: false),
-                    GasConsumption = table.Column<float>(type: "real", nullable: false),
-                    EnergySaving = table.Column<float>(type: "real", nullable: false),
-                    GasSaving = table.Column<float>(type: "real", nullable: false),
-                    AllData = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    EnergyConsumption = table.Column<float>(type: "float", nullable: false),
+                    GasConsumption = table.Column<float>(type: "float", nullable: false),
+                    EnergySaving = table.Column<float>(type: "float", nullable: false),
+                    GasSaving = table.Column<float>(type: "float", nullable: false),
+                    Date = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     DepartmentID = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -46,7 +46,7 @@ namespace Project_D.Migrations.project_D
                     UserName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     PassWord = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    IsAdmin = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    IsAdmin = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
