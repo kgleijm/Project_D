@@ -1,17 +1,64 @@
-@model IEnumerable<project_D.Models.Data>; 
+@model Tuple<List<project_D.Models.Department>, List<project_D.Models.Data>, bool>;
 @{
     ViewData["Title"] = "Admin Page";
 }
 
-<div>
-    <div class="row">
-        <div class="col-sm-12 my-4">
-            <p class="text-center">
-                Admin Page
-                @foreach (var data in Model) {
-                    @(data.DepartmentID + ": energy-" + data.EnergyConsumption + " gas-" + data.GasConsumption + "  ")
-                }
-            </p>
+@if (Model.Item3)
+{
+    <div>
+        <div class="row">
+            <div class="col-sm-12 my-4">
+                <p class="text-center">
+                    JE ZIT NU OP HET TOTAAL SCHERM
+                    @foreach (var data in Model.Item2)
+                    {
+                        <br> @(data.DepartmentID + ":  date-" + data.Date + " energy-" + data.EnergyConsumption + " gas-" + data.GasConsumption + "  ")
+                    }
+                </p>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <p class="text-center">
+                    Departments
+                    <br> <a href="/Admin">Totaal</a>
+                    @foreach (var department in Model.Item1)
+                    {
+                        string link = "/Admin/" + department.DepartmentID;
+                        <br> <a href=@link> met id: @(department.DepartmentID) </a>
+                    }
+                </p>
+            </div>
         </div>
     </div>
-</div>
+} else
+{
+    <div>
+        <div class="row">
+            <div class="col-sm-12 my-4">
+                <p class="text-center">
+                    JE ZIT NU OP EEN DEPARTMENT SCHERM
+                    @foreach (var data in Model.Item2)
+                    {
+                        <br> @(data.DepartmentID + ":  date-" + data.Date + " energy-" + data.EnergyConsumption + " gas-" + data.GasConsumption + "  ")
+                    }
+                </p>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <p class="text-center">
+                    Departments
+                    <br> <a href="/Admin">Totaal</a>
+                    @foreach (var department in Model.Item1)
+                    {
+                        string link = "/Admin/" + department.DepartmentID;
+                        <br> <a href=@link> met id: @(department.DepartmentID) </a>
+                    }
+                </p>
+            </div>
+        </div>
+    </div>
+}

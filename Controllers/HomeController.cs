@@ -27,7 +27,7 @@ namespace Project_D.Controllers
                 _context.Department.Add( new Department { Name = "Department1" } );
                 _context.Department.Add( new Department { Name = "Department2" } );
                 _context.SaveChanges();
-                //add 2 days of data per department
+                //add 2 days of 2 years data per department
                 _context.Data.Add(
                         new Data
                         {
@@ -71,21 +71,25 @@ namespace Project_D.Controllers
             }
         }
 
+        [Route("/")]
         public IActionResult Index()
         {
             return View();
         }
 
+        [Route("/Privacy")]
         public IActionResult Privacy()
         {
             return View();
         }
 
+        [Route("/External")]
         public IActionResult External()
         {
             return View();
         }
 
+        [Route("/Login")]
         public IActionResult Login()
         {
             return View();
@@ -94,7 +98,19 @@ namespace Project_D.Controllers
         [Route("/Admin")]
         public IActionResult Admin()
         {
-            return View(_context.Data.ToList());
+            //hier moet ook opgewekte data bij
+            var tuple = Tuple.Create(_context.Department.ToList(), _context.Data.ToList(), true);
+            return View(tuple);
+        }
+
+        [Route("/Admin/{id}")]
+        public IActionResult Admin(int id)
+        {
+            List<Data> data = (from d in _context.Data
+                                           where d.DepartmentID == id
+                                           select d).ToList();
+            var tuple = Tuple.Create(_context.Department.ToList(), data, false);
+            return View(tuple);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
