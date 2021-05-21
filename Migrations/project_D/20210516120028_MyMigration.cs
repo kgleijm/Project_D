@@ -14,8 +14,8 @@ namespace Project_D.Migrations.project_D
                         .Annotation("SqlServer:Identity", "1, 1"),
                     EnergyConsumption = table.Column<float>(type: "real", nullable: false),
                     GasConsumption = table.Column<float>(type: "real", nullable: false),
-                    EnergySaving = table.Column<float>(type: "real", nullable: false),
-                    GasSaving = table.Column<float>(type: "real", nullable: false),
+                    EnergyGenerated = table.Column<float>(type: "real", nullable: false),
+                    GasGenerated = table.Column<float>(type: "real", nullable: false),
                     AllData = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     DepartmentID = table.Column<int>(type: "int", nullable: false)
                 },
