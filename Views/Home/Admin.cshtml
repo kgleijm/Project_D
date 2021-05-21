@@ -1,0 +1,17 @@
+@model IEnumerable<project_D.Models.Data>; 
+@{
+    ViewData["Title"] = "Admin Page";
+}
+
+<div>
+    <div class="row">
+        <div class="col-sm-12 my-4">
+            <p class="text-center">
+                Admin Page
+                @foreach (var data in Model) {
+                    @(data.DepartmentID + ": energy-" + data.EnergyConsumption + " gas-" + data.GasConsumption + "  ")
+                }
+            </p>
+        </div>
+    </div>
+</div>
