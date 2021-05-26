@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using project_D.Models;
@@ -31,34 +30,82 @@ namespace Project_D.Controllers
                 _context.Data.Add(
                         new Data
                         {
-                            EnergyConsumption = 20.0f,
-                            GasConsumption = 10.0f,
+                            EnergyConsumption = 20.0,
+                            GasConsumption = 10.0,
+                            Date = "18/05/2020",
+                            DepartmentID = _context.Department.ToList()[1].DepartmentID,
+                            EnergyGenerated = 0.0,
+                            GasGenerated = 0.0
+                        });
+                _context.Data.Add(
+                        new Data
+                        {
+                            EnergyConsumption = 25.0,
+                            GasConsumption = 15.0,
+                            Date = "19/05/2020",
+                            DepartmentID = _context.Department.ToList()[1].DepartmentID,
+                            EnergyGenerated = 15.0,
+                            GasGenerated = 0.0
+                        });
+                _context.Data.Add(
+                        new Data
+                        {
+                            EnergyConsumption = 10.0,
+                            GasConsumption = 15.0,
+                            Date = "18/05/2020",
+                            DepartmentID = _context.Department.ToList()[0].DepartmentID,
+                            EnergyGenerated = 10.0,
+                            GasGenerated = 0.0
+                        });
+                _context.Data.Add(
+                        new Data
+                        {
+                            EnergyConsumption = 30.0,
+                            GasConsumption = 30.0,
+                            Date = "19/05/2020",
+                            DepartmentID = _context.Department.ToList()[0].DepartmentID,
+                            EnergyGenerated = 5.0,
+                            GasGenerated = 0.0
+                        });
+                _context.Data.Add(
+                        new Data
+                        {
+                            EnergyConsumption = 30.0,
+                            GasConsumption = 20.0,
                             Date = "18/05/2021",
-                            DepartmentID = _context.Department.ToList()[0].DepartmentID
+                            DepartmentID = _context.Department.ToList()[1].DepartmentID,
+                            EnergyGenerated = 5.0,
+                            GasGenerated = 0.0
                         });
                 _context.Data.Add(
                         new Data
                         {
-                            EnergyConsumption = 25.0f,
-                            GasConsumption = 15.0f,
+                            EnergyConsumption = 35.0,
+                            GasConsumption = 25.0,
                             Date = "19/05/2021",
-                            DepartmentID = _context.Department.ToList()[0].DepartmentID
+                            DepartmentID = _context.Department.ToList()[1].DepartmentID,
+                            EnergyGenerated = 20.0,
+                            GasGenerated = 0.0
                         });
                 _context.Data.Add(
                         new Data
                         {
-                            EnergyConsumption = 30.0f,
-                            GasConsumption = 20.0f,
+                            EnergyConsumption = 20.0,
+                            GasConsumption = 10.0,
                             Date = "18/05/2021",
-                            DepartmentID = _context.Department.ToList()[1].DepartmentID
+                            DepartmentID = _context.Department.ToList()[0].DepartmentID,
+                            EnergyGenerated = 15.0,
+                            GasGenerated = 0.0
                         });
                 _context.Data.Add(
                         new Data
                         {
-                            EnergyConsumption = 35.0f,
-                            GasConsumption = 25.0f,
+                            EnergyConsumption = 25.0,
+                            GasConsumption = 15.0,
                             Date = "19/05/2021",
-                            DepartmentID = _context.Department.ToList()[1].DepartmentID
+                            DepartmentID = _context.Department.ToList()[0].DepartmentID,
+                            EnergyGenerated = 10.0,
+                            GasGenerated = 0.0
                         });
                 _context.SaveChanges();
             }
@@ -98,8 +145,23 @@ namespace Project_D.Controllers
         [Route("/Admin")]
         public IActionResult Admin()
         {
-            //hier moet ook opgewekte data bij
-            var tuple = Tuple.Create(_context.Department.ToList(), _context.Data.ToList(), true);
+            List<Data> data = (from d in _context.Data
+                               group d by d.Date into g
+                               orderby g.Key
+                               select new Data
+                               {
+                                   Date = g.Key,
+                                   EnergyConsumption = g.Sum(ec => ec.EnergyConsumption),
+                                   GasConsumption = g.Sum(gc => gc.GasConsumption),
+                                   EnergyGenerated = g.Sum(eg => eg.EnergyGenerated)
+                               }).ToList();
+            Data total = new Data
+            {
+                EnergyConsumption = (from d in data select d.EnergyConsumption).Sum(),
+                GasConsumption = (from d in data select d.GasConsumption).Sum(),
+                EnergyGenerated = (from d in data select d.EnergyGenerated).Sum(),
+            };
+            var tuple = Tuple.Create(_context.Department.ToList(), data, total, true, new Department());
             return View(tuple);
         }
 
@@ -107,9 +169,26 @@ namespace Project_D.Controllers
         public IActionResult Admin(int id)
         {
             List<Data> data = (from d in _context.Data
-                                           where d.DepartmentID == id
-                                           select d).ToList();
-            var tuple = Tuple.Create(_context.Department.ToList(), data, false);
+                               where d.DepartmentID == id
+                               group d by d.Date into g
+                               orderby g.Key
+                               select new Data
+                               {
+                                   Date = g.Key,
+                                   EnergyConsumption = g.Sum(ec => ec.EnergyConsumption),
+                                   GasConsumption = g.Sum(gc => gc.GasConsumption),
+                                   DepartmentID = id
+                               }).ToList();
+            Data total = new Data
+            {
+                EnergyConsumption = (from d in data where d.DepartmentID == id select d.EnergyConsumption).Sum(),
+                GasConsumption = (from d in data where d.DepartmentID == id select d.GasConsumption).Sum(),
+                EnergyGenerated = (from d in data where d.DepartmentID == id select d.EnergyGenerated).Sum(),
+            };
+            Department current = (from d in _context.Department
+                                 where d.DepartmentID == id
+                                 select d).ToList()[0];
+            var tuple = Tuple.Create(_context.Department.ToList(), data, total, false, current);
             return View(tuple);
         }
 

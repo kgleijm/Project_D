@@ -12,10 +12,10 @@ namespace Project_D.Migrations.project_D
                 {
                     DataID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    EnergyConsumption = table.Column<float>(type: "real", nullable: false),
-                    GasConsumption = table.Column<float>(type: "real", nullable: false),
-                    EnergyGenerated = table.Column<float>(type: "real", nullable: false),
-                    GasGenerated = table.Column<float>(type: "real", nullable: false),
+                    EnergyConsumption = table.Column<float>(type: "float", nullable: false),
+                    GasConsumption = table.Column<float>(type: "float", nullable: false),
+                    EnergyGenerated = table.Column<float>(type: "float", nullable: false),
+                    GasGenerated = table.Column<float>(type: "float", nullable: false),
                     Date = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     DepartmentID = table.Column<int>(type: "int", nullable: false)
                 },

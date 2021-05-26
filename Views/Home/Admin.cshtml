@@ -1,19 +1,39 @@
-@model Tuple<List<project_D.Models.Department>, List<project_D.Models.Data>, bool>;
+@model Tuple<List<project_D.Models.Department>, List<project_D.Models.Data>, project_D.Models.Data, bool, project_D.Models.Department>;
 @{
     ViewData["Title"] = "Admin Page";
 }
 
-@if (Model.Item3)
+@if (Model.Item4)
 {
     <div>
         <div class="row">
             <div class="col-sm-12 my-4">
                 <p class="text-center">
                     JE ZIT NU OP HET TOTAAL SCHERM
-                    @foreach (var data in Model.Item2)
-                    {
-                        <br> @(data.DepartmentID + ":  date-" + data.Date + " energy-" + data.EnergyConsumption + " gas-" + data.GasConsumption + "  ")
-                    }
+                    <table>
+                        <tr>
+                            <th>Dag</th>
+                            <th>Energieverbruik</th>
+                            <th>Gasverbruik</th>
+                            <th>Opgewekte energie</th>
+                        </tr>
+                        @foreach (var data in Model.Item2)
+                        {
+                            //show al data
+                            <tr>
+                                <td>@data.Date</td>
+                                <td>@data.EnergyConsumption</td>
+                                <td>@data.GasConsumption</td>
+                                <td>@data.EnergyGenerated</td>
+                            </tr>
+                        }
+                    <tr>
+                        <th rowspan="1">Totaal:</th>
+                        <td>@Model.Item3.EnergyConsumption</td>
+                        <td>@Model.Item3.GasConsumption</td>
+                        <td>@Model.Item3.EnergyGenerated</td>
+                    </tr>
+                    </table>
                 </p>
                 <br>
                 <br>
@@ -26,7 +46,7 @@
                     @foreach (var department in Model.Item1)
                     {
                         string link = "/Admin/" + department.DepartmentID;
-                        <br> <a href=@link> met id: @(department.DepartmentID) </a>
+                        <br> <a href=@link>@(department.Name) met id: @(department.DepartmentID) </a>
                     }
                 </p>
             </div>
@@ -38,11 +58,28 @@
         <div class="row">
             <div class="col-sm-12 my-4">
                 <p class="text-center">
-                    JE ZIT NU OP EEN DEPARTMENT SCHERM
-                    @foreach (var data in Model.Item2)
-                    {
-                        <br> @(data.DepartmentID + ":  date-" + data.Date + " energy-" + data.EnergyConsumption + " gas-" + data.GasConsumption + "  ")
-                    }
+                    JE ZIT NU OP HET SCHERM VAN: @Model.Item5.Name
+                    <table>
+                        <tr>
+                            <th>Dag</th>
+                            <th>Energieverbruik</th>
+                            <th>Gasverbruik</th>
+                        </tr>
+                        @foreach (var data in Model.Item2)
+                        {
+                            //show al data
+                            <tr>
+                                <td>@data.Date</td>
+                                <td>@data.EnergyConsumption</td>
+                                <td>@data.GasConsumption</td>
+                            </tr>
+                        }
+                        <tr>
+                            <th rowspan="1">Totaal:</th>
+                            <td>@Model.Item3.EnergyConsumption</td>
+                            <td>@Model.Item3.GasConsumption</td>
+                        </tr>
+                    </table>
                 </p>
                 <br>
                 <br>
@@ -55,7 +92,7 @@
                     @foreach (var department in Model.Item1)
                     {
                         string link = "/Admin/" + department.DepartmentID;
-                        <br> <a href=@link> met id: @(department.DepartmentID) </a>
+                        <br> <a href=@link>@(department.Name) met id: @(department.DepartmentID) </a>
                     }
                 </p>
             </div>
