@@ -8,8 +8,8 @@
     <div>
         <div class="row">
             <div class="col-sm-12 my-4">
-                <p class="text-center">
-                    JE ZIT NU OP HET TOTAAL SCHERM
+                JE ZIT NU OP HET TOTAAL SCHERM
+                <form>
                     <table>
                         <tr>
                             <th>Dag</th>
@@ -24,7 +24,7 @@
                                 <td>@data.Date</td>
                                 <td>@data.EnergyConsumption</td>
                                 <td>@data.GasConsumption</td>
-                                <td>@data.EnergyGenerated</td>
+                                <td>@data.EnergyGenerated + <input type="number" step="0.1" placeholder="10"/></td>
                             </tr>
                         }
                     <tr>
@@ -34,7 +34,9 @@
                         <td>@Model.Item3.EnergyGenerated</td>
                     </tr>
                     </table>
-                </p>
+                    <button type="submit">Opslaan</button>
+                </form>
+                <button href="">Export</button>
                 <br>
                 <br>
                 <br>
@@ -57,8 +59,8 @@
     <div>
         <div class="row">
             <div class="col-sm-12 my-4">
-                <p class="text-center">
-                    JE ZIT NU OP HET SCHERM VAN: @Model.Item5.Name
+                JE ZIT NU OP HET SCHERM VAN: @Model.Item5.Name
+                <form>
                     <table>
                         <tr>
                             <th>Dag</th>
@@ -70,8 +72,8 @@
                             //show al data
                             <tr>
                                 <td>@data.Date</td>
-                                <td>@data.EnergyConsumption</td>
-                                <td>@data.GasConsumption</td>
+                                <td>@data.EnergyConsumption + <input type="number" step="0.1" placeholder="10"/></td>
+                                <td>@data.GasConsumption + <input type="number" step="0.1" placeholder="10"/></td>
                             </tr>
                         }
                         <tr>
@@ -80,7 +82,9 @@
                             <td>@Model.Item3.GasConsumption</td>
                         </tr>
                     </table>
-                </p>
+                    <button type="submit">Opslaan</button>
+                </form>
+                <button href="">Export</button>
                 <br>
                 <br>
                 <br>
