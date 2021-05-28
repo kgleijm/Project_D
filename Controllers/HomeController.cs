@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using project_D.Models;
 using Project_D.Models;
+using Project_D.Classes;
 
 namespace Project_D.Controllers
 {
@@ -23,8 +24,8 @@ namespace Project_D.Controllers
             if (_context.Department.ToList().Count == 0 && _context.Data.ToList().Count == 0)
             {
                 //add 2 departments
-                _context.Department.Add( new Department { Name = "Department1" } );
-                _context.Department.Add( new Department { Name = "Department2" } );
+                _context.Department.Add(new Department { Name = "Department1" });
+                _context.Department.Add(new Department { Name = "Department2" });
                 _context.SaveChanges();
                 //add 2 days of 2 years data per department
                 _context.Data.Add(
@@ -112,7 +113,7 @@ namespace Project_D.Controllers
             if (_context.User.ToList().Count == 0)
             {
                 //add 2 users (1 admin)
-                _context.User.Add( new User { UserName="admin", PassWord="abc123", Email="adminMail@gmail.com", IsAdmin=1 } );
+                _context.User.Add(new User { UserName = "admin", PassWord = "abc123", Email = "adminMail@gmail.com", IsAdmin = 1 });
                 _context.User.Add(new User { UserName = "genericUser", PassWord = "", Email = "genericEmail@gmail.com", IsAdmin = 0 });
                 _context.SaveChanges();
             }
@@ -142,6 +143,7 @@ namespace Project_D.Controllers
             return View();
         }
 
+        [HttpGet]
         [Route("/Admin")]
         public IActionResult Admin()
         {
@@ -155,16 +157,18 @@ namespace Project_D.Controllers
                                    GasConsumption = g.Sum(gc => gc.GasConsumption),
                                    EnergyGenerated = g.Sum(eg => eg.EnergyGenerated)
                                }).ToList();
+            List<Data> orderedData = DataWithDateTime.OrderedData(data);
             Data total = new Data
             {
                 EnergyConsumption = (from d in data select d.EnergyConsumption).Sum(),
                 GasConsumption = (from d in data select d.GasConsumption).Sum(),
                 EnergyGenerated = (from d in data select d.EnergyGenerated).Sum(),
             };
-            var tuple = Tuple.Create(_context.Department.ToList(), data, total, true, new Department());
+            var tuple = Tuple.Create(_context.Department.ToList(), orderedData, total, true, new Department());
             return View(tuple);
         }
 
+        [HttpGet]
         [Route("/Admin/{id}")]
         public IActionResult Admin(int id)
         {
@@ -185,10 +189,11 @@ namespace Project_D.Controllers
                 GasConsumption = (from d in data where d.DepartmentID == id select d.GasConsumption).Sum(),
                 EnergyGenerated = (from d in data where d.DepartmentID == id select d.EnergyGenerated).Sum(),
             };
+            List<Data> orderedData = DataWithDateTime.OrderedData(data);
             Department current = (from d in _context.Department
                                  where d.DepartmentID == id
                                  select d).ToList()[0];
-            var tuple = Tuple.Create(_context.Department.ToList(), data, total, false, current);
+            var tuple = Tuple.Create(_context.Department.ToList(), orderedData, total, false, current);
             return View(tuple);
         }
 
