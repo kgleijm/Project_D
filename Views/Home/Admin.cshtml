@@ -6,52 +6,49 @@
 <div class="row">
     <div class="col-sm-12 col-md-4">
         <p class="">
-                    Departments
-                    <br> <a href="/Admin">Totaal</a>
-                    @foreach (var department in Model.Item1)
-                    {
-                        string link = "/Admin/" + department.DepartmentID;
-                        <br> <a href=@link>@(department.Name) met id: @(department.DepartmentID) </a>
-                    }
-                </p>
+            Departments
+            <br> <a href="/Admin">Totaal</a>
+            @foreach (var department in Model.Item1)
+            {
+                string link = "/Admin/" + department.DepartmentID;
+                <br> <a href=@link>@(department.DepartmentID). @(department.Name)  </a>
+            }
+        </p>
     </div>
 
     <div class="col-sm-12 col-md-8">
 
 @if (Model.Item4)
 {
-                <h6>Totaal</h6>
-                <form>
-                    <table class="table">
-                        <thead class="">
-                            <th>Dag</th>
-                            <th>Energieverbruik</th>
-                            <th>Gasverbruik</th>
-                            <th>Opgewekte energie</th>
-                        </thead>
-                        @foreach (var data in Model.Item2)
-                        {
-                            //show al data
-                            <tr>
-                                <td>@data.Date</td>
-                                <td>@data.EnergyConsumption</td>
-                                <td>@data.GasConsumption</td>
-                                <td>@data.EnergyGenerated + <input type="number" step="0.1" placeholder="10"/></td>
-                            </tr>
-                        }
-                    <tr>
-                        <th rowspan="1">Totaal:</th>
-                        <td>@Model.Item3.EnergyConsumption</td>
-                        <td>@Model.Item3.GasConsumption</td>
-                        <td>@Model.Item3.EnergyGenerated</td>
-                    </tr>
-                    </table>
-                    <input type="submit" class="btn btn-primary" value="Opslaan">
-                    <button href="" class="btn btn-primary">Exporteren</button>
-                </form>
-                
-                
-                
+    <h6>Totaal</h6>
+    <form>
+        <table class="table">
+            <thead class="">
+                <th>Dag</th>
+                <th>Energieverbruik</th>
+                <th>Gasverbruik</th>
+                <th>Opgewekte energie</th>
+            </thead>
+            @foreach (var data in Model.Item2)
+            {
+                //show al data
+                <tr>
+                    <td>@data.Date</td>
+                    <td>@data.EnergyConsumption</td>
+                    <td>@data.GasConsumption</td>
+                    <td>@data.EnergyGenerated + <input type="number" step="0.1" placeholder="10"/></td>
+                </tr>
+            }
+        <tr>
+            <th rowspan="1">Totaal:</th>
+            <td>@Model.Item3.EnergyConsumption</td>
+            <td>@Model.Item3.GasConsumption</td>
+            <td>@Model.Item3.EnergyGenerated</td>
+        </tr>
+        </table>
+        <input type="submit" class="btn btn-primary" value="Opslaan">
+        <button href="" class="btn btn-primary">Exporteren</button>
+    </form>
 } else
 {
     <div>
