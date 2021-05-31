@@ -1,0 +1,29 @@
+@{
+    ViewData["Title"] = "Admin Login Page";
+}
+
+<div>
+    <div class="row">
+        <div class="col-sm-4 my-4">
+            <div class="form-group">
+                <h5 class="">
+                    Access Admin Page
+                </h5><br>
+                <form>
+                    <label for="password">Password</label>
+                    <div class="input-group">
+                        <input class="form-control" type="password" name="password" />
+                        <div class="input-group-append">
+                            <input type="submit" value="Log in" class="btn btn-primary" />
+                        </div>
+                        
+                    </div>
+                    
+                </form>
+            </div>
+
+
+            <a asp-controller="Home" asp-action="Admin">FOR DEV: Continue</a>
+        </div>
+    </div>
+</div>

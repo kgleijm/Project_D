@@ -1,0 +1,17 @@
+@{
+    ViewData["Title"] = "External Dashboard";
+    ViewData["Houses"] = 133;
+}
+
+<div>
+    <div class="row">
+        <div class="col-sm-12 my-4">
+            <p class="text-center">
+                <span class="display-4">Wij hebben dit jaar</span><br>
+                <span class="display-2"><strong>@ViewData["Houses"] aantal huizen</strong></span><br>
+                <span class="display-4">aan energieverbruik bespaard</span><br />
+                <span><svg xmlns="http://www.w3.org/2000/svg" height="128px" viewBox="0 0 24 24" width="128px" fill="#000000"><path d="M0 0h24v24H0z" fill="none"/><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg></span>
+            </p>
+        </div>
+    </div>
+</div>
