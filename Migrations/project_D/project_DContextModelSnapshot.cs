@@ -33,13 +33,13 @@ namespace Project_D.Migrations.project_D
                     b.Property<float>("EnergyConsumption")
                         .HasColumnType("real");
 
-                    b.Property<float>("EnergySaving")
+                    b.Property<float>("EnergyGenerated")
                         .HasColumnType("real");
 
                     b.Property<float>("GasConsumption")
                         .HasColumnType("real");
 
-                    b.Property<float>("GasSaving")
+                    b.Property<float>("GasGenerated")
                         .HasColumnType("real");
 
                     b.HasKey("DataID");

@@ -53,7 +53,7 @@ namespace Project_D.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("DataID,EnergyConsumption,GasConsumption,EnergySaving,GasSaving,Date,DepartmentID")] Data @data)
+        public async Task<IActionResult> Create([Bind("DataID,EnergyConsumption,GasConsumption,EnergyGenerated,GasGenerated,Date,DepartmentID")] Data @data)
         {
             if (ModelState.IsValid)
             {
@@ -85,7 +85,7 @@ namespace Project_D.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("DataID,EnergyConsumption,GasConsumption,EnergySaving,GasSaving,Date,DepartmentID")] Data @data)
+        public async Task<IActionResult> Edit(int id, [Bind("DataID,EnergyConsumption,GasConsumption,EnergyGenerated,GasGenerated,Date,DepartmentID")] Data @data)
         {
             if (id != @data.DataID)
             {

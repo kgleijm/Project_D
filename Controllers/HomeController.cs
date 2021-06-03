@@ -33,6 +33,8 @@ namespace Project_D.Controllers
                         {
                             EnergyConsumption = 20.0f,
                             GasConsumption = 10.0f,
+                            EnergyGenerated = 13.0f,
+                            GasGenerated = 10.0f,
                             Date = "18/05/2021",
                             DepartmentID = _context.Department.ToList()[0].DepartmentID
                         });
@@ -41,6 +43,8 @@ namespace Project_D.Controllers
                         {
                             EnergyConsumption = 25.0f,
                             GasConsumption = 15.0f,
+                            EnergyGenerated = 33.0f,
+                            GasGenerated = 22.0f,
                             Date = "19/05/2021",
                             DepartmentID = _context.Department.ToList()[0].DepartmentID
                         });
@@ -49,6 +53,8 @@ namespace Project_D.Controllers
                         {
                             EnergyConsumption = 30.0f,
                             GasConsumption = 20.0f,
+                            EnergyGenerated = 15.0f,
+                            GasGenerated = 25.0f,
                             Date = "18/05/2021",
                             DepartmentID = _context.Department.ToList()[1].DepartmentID
                         });
@@ -57,6 +63,8 @@ namespace Project_D.Controllers
                         {
                             EnergyConsumption = 35.0f,
                             GasConsumption = 25.0f,
+                            EnergyGenerated = 30.0f,
+                            GasGenerated = 20.0f,
                             Date = "19/05/2021",
                             DepartmentID = _context.Department.ToList()[1].DepartmentID
                         });
