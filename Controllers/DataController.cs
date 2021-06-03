@@ -65,19 +65,33 @@ namespace Project_D.Controllers
         }
 
         // GET: Data/Edit/5
+
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null)
+            bool admin = false;
+            foreach (var user in _context.User)
             {
-                return NotFound();
+                if(user.IsAdmin == 1)
+                {
+                    admin = true;
+                }
             }
+            if (admin)
+            {
+                if (id == null)
+                {
+                    return NotFound();
+                }
 
-            var @data = await _context.Data.FindAsync(id);
-            if (@data == null)
-            {
-                return NotFound();
+                var @data = await _context.Data.FindAsync(id);
+                if (@data == null)
+                {
+                    return NotFound();
+                }
+                return View(@data);
             }
-            return View(@data);
+            return NotFound();
+
         }
 
         // POST: Data/Edit/5
@@ -87,50 +101,76 @@ namespace Project_D.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("DataID,EnergyConsumption,GasConsumption,EnergyGenerated,GasGenerated,Date,DepartmentID")] Data @data)
         {
-            if (id != @data.DataID)
+            bool admin = false;
+            foreach (var user in _context.User)
             {
-                return NotFound();
+                if (user.IsAdmin == 1)
+                {
+                    admin = true;
+                }
             }
+            if (admin)
+            {
+                if (id != @data.DataID)
+                {
+                    return NotFound();
+                }
 
-            if (ModelState.IsValid)
-            {
-                try
+                if (ModelState.IsValid)
                 {
-                    _context.Update(@data);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!DataExists(@data.DataID))
+                    try
                     {
-                        return NotFound();
+                        _context.Update(@data);
+                        await _context.SaveChangesAsync();
                     }
-                    else
+                    catch (DbUpdateConcurrencyException)
                     {
-                        throw;
+                        if (!DataExists(@data.DataID))
+                        {
+                            return NotFound();
+                        }
+                        else
+                        {
+                            throw;
+                        }
                     }
+                    return RedirectToAction(nameof(Index));
                 }
-                return RedirectToAction(nameof(Index));
+                return View(@data);
             }
-            return View(@data);
+            return NotFound();
+
         }
 
         // GET: Data/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null)
+            bool admin = false;
+            foreach (var user in _context.User)
             {
-                return NotFound();
+                if (user.IsAdmin == 1)
+                {
+                    admin = true;
+                }
             }
-
-            var @data = await _context.Data
-                .FirstOrDefaultAsync(m => m.DataID == id);
-            if (@data == null)
+            if (admin)
             {
-                return NotFound();
-            }
+                if (id == null)
+                {
+                    return NotFound();
+                }
 
-            return View(@data);
+                var @data = await _context.Data
+                    .FirstOrDefaultAsync(m => m.DataID == id);
+                if (@data == null)
+                {
+                    return NotFound();
+                }
+
+                return View(@data);
+            }
+            return NotFound();
+
         }
 
         // POST: Data/Delete/5
@@ -138,10 +178,23 @@ namespace Project_D.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var @data = await _context.Data.FindAsync(id);
-            _context.Data.Remove(@data);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            bool admin = false;
+            foreach (var user in _context.User)
+            {
+                if (user.IsAdmin == 1)
+                {
+                    admin = true;
+                }
+            }
+            if (admin)
+            {
+                var @data = await _context.Data.FindAsync(id);
+                _context.Data.Remove(@data);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            return NotFound();
+
         }
 
         private bool DataExists(int id)

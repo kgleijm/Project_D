@@ -55,19 +55,13 @@ namespace Project_D.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("UserID,UserName,PassWord,Email,IsAdmin")] User user, IServiceProvider serviceProvider)
+        public async Task<IActionResult> Create([Bind("UserID,UserName,PassWord,Email,IsAdmin")] User user)
         {
             if (ModelState.IsValid)
             {
 
-              //  _context.Add(user);
+                _context.Add(user);
                 await _context.SaveChangesAsync();
-                var UserManager = serviceProvider.GetRequiredService<UserManager<User>>();
-                var judalist = await _context.User.ToListAsync();
-
-                //here we tie the new user to the role
-               //   await UserManager.AddToRoleAsync(judalist, "Admin");
-
                 return RedirectToAction(nameof(Index));
             }
 
