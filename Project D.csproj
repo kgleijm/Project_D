@@ -21,4 +21,9 @@
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="5.0.6" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Content\" />
+    <Folder Include="wwwroot\Content\" />
+  </ItemGroup>
+
 </Project>
