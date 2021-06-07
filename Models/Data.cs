@@ -11,7 +11,9 @@ namespace project_D.Models
 		public double EnergyConsumption { get; set; }
 		public double GasConsumption { get; set; }
 		public double EnergyGenerated { get; set; }
-		public double GasGenerated { get; set; }
+		public double EnergyGenAdjustment { get; set; }
+		public double EnergyAdjustment { get; set; }
+		public double GasAdjustment { get; set; }
 		public string Date { get; set; }
 		public int DepartmentID { get; set; }
 	}
