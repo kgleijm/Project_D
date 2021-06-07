@@ -51,9 +51,27 @@
     </form>
 } else
 {
-    <div>
-        Je zit nu op scherm X
-    </div>
+    <table class="table">
+        <thead>
+            <th>Dag</th>
+            <th>Energieverbruik</th>
+            <th>Gasverbruik</th>
+        </thead>
+        @foreach (var data in Model.Item2)
+        {
+            //show al data
+            <tr>
+                <td>@data.Date</td>
+                <td>@data.EnergyConsumption</td>
+                <td>@data.GasConsumption</td>
+            </tr>
+        }
+        <tr>
+            <th rowspan="1">Totaal:</th>
+            <td>@Model.Item3.EnergyConsumption</td>
+            <td>@Model.Item3.GasConsumption</td>
+        </tr>
+    </table>
 }
     </div>
 </div>
