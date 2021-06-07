@@ -152,10 +152,15 @@ namespace Project_D.Controllers
             return View();
         }
 
+        [HttpGet]
         [Route("/External")]
         public IActionResult External()
         {
-            return View();
+            double total = (from d in _context.Data
+                            group d by d.Date into g
+                            select g.Average(eg => eg.EnergyGenerated) + g.Average(eg => eg.EnergyGenAdjustment)).Sum();
+
+            return View(total);
         }
 
         [Route("/Login")]
@@ -175,7 +180,7 @@ namespace Project_D.Controllers
                                    Date = g.Key,
                                    EnergyConsumption = (g.Sum(ec => ec.EnergyConsumption) + g.Sum(ea => ea.EnergyAdjustment)),
                                    GasConsumption = (g.Sum(gc => gc.GasConsumption) + g.Sum(ga => ga.GasAdjustment)),
-                                   EnergyGenerated = g.Sum(eg => eg.EnergyGenerated),
+                                   EnergyGenerated = g.Average(eg => eg.EnergyGenerated),
                                    EnergyGenAdjustment = g.Average(eg => eg.EnergyGenAdjustment)
                                }).ToList();
             List<Data> orderedData = DataWithDateTime.OrderedData(data);
@@ -183,9 +188,8 @@ namespace Project_D.Controllers
             {
                 EnergyConsumption = (from d in data select d.EnergyConsumption).Sum() + (from d in data select d.EnergyAdjustment).Sum(),
                 GasConsumption = (from d in data select d.GasConsumption).Sum() + (from d in data select d.GasAdjustment).Sum(),
-                EnergyGenerated = ((from d in data select d.EnergyGenerated).Sum() + (from d in _context.Data
-                                                                                      group d by d.Date into g
-                                                                                      select g.Average(eg => eg.EnergyGenAdjustment)).Sum())
+                EnergyGenerated = ((from d in _context.Data group d by d.Date into g select g.Average(eg => eg.EnergyGenerated)).Sum() + 
+                                    (from d in _context.Data group d by d.Date into g select g.Average(eg => eg.EnergyGenAdjustment)).Sum())
             };
             var tuple = Tuple.Create(_context.Department.ToList(), orderedData, total, true, new Department());
             return View(tuple);
@@ -256,7 +260,7 @@ namespace Project_D.Controllers
                                    Date = g.Key,
                                    EnergyConsumption = (g.Sum(ec => ec.EnergyConsumption) + g.Sum(ea => ea.EnergyAdjustment)),
                                    GasConsumption = (g.Sum(gc => gc.GasConsumption) + g.Sum(ga => ga.GasAdjustment)),
-                                   EnergyGenerated = g.Sum(eg => eg.EnergyGenerated),
+                                   EnergyGenerated = g.Average(eg => eg.EnergyGenerated),
                                    EnergyGenAdjustment = g.Average(eg => eg.EnergyGenAdjustment)
                                }).ToList();
             List<Data> orderedData = DataWithDateTime.OrderedData(data);
@@ -264,9 +268,8 @@ namespace Project_D.Controllers
             {
                 EnergyConsumption = (from d in data select d.EnergyConsumption).Sum() + (from d in data select d.EnergyAdjustment).Sum(),
                 GasConsumption = (from d in data select d.GasConsumption).Sum() + (from d in data select d.GasAdjustment).Sum(),
-                EnergyGenerated = ((from d in data select d.EnergyGenerated).Sum() + (from d in _context.Data
-                                                                                      group d by d.Date into g
-                                                                                      select g.Average(eg => eg.EnergyGenAdjustment)).Sum())
+                EnergyGenerated = ((from d in _context.Data group d by d.Date into g select g.Average(eg => eg.EnergyGenerated)).Sum() +
+                                    (from d in _context.Data group d by d.Date into g select g.Average(eg => eg.EnergyGenAdjustment)).Sum())
             };
 
 
