@@ -9,11 +9,12 @@ namespace Project_D.Classes
 {
     public class DataWithDateTime
 	{
-		public int DataID { get; set; }
 		public double EnergyConsumption { get; set; }
 		public double GasConsumption { get; set; }
 		public double EnergyGenerated { get; set; }
-		public double GasGenerated { get; set; }
+		public double EnergyGenAdjustment { get; set; }
+		public double EnergyAdjustment { get; set; }
+		public double GasAdjustment { get; set; }
 		public DateTime Date { get; set; }
 		public int DepartmentID { get; set; }
 
@@ -26,7 +27,9 @@ namespace Project_D.Classes
 					EnergyConsumption = dat.EnergyConsumption,
 					GasConsumption = dat.GasConsumption,
 					EnergyGenerated = dat.EnergyGenerated,
-					GasGenerated = dat.EnergyGenerated,
+					GasAdjustment = dat.GasAdjustment,
+					EnergyAdjustment = dat.EnergyAdjustment,
+					EnergyGenAdjustment = dat.EnergyGenAdjustment,
 					Date = DateTime.ParseExact(dat.Date, "dd/MM/yyyy", CultureInfo.InvariantCulture),
 					DepartmentID = dat.DepartmentID
 				} );
@@ -42,8 +45,10 @@ namespace Project_D.Classes
 					EnergyConsumption = dat.EnergyConsumption,
 					GasConsumption = dat.GasConsumption,
 					EnergyGenerated = dat.EnergyGenerated,
-					GasGenerated = dat.EnergyGenerated,
-					Date = dat.Date.ToString("dd/MM/yyyy"),
+					GasAdjustment = dat.GasAdjustment,
+					EnergyAdjustment = dat.EnergyAdjustment,
+					EnergyGenAdjustment = dat.EnergyGenAdjustment,
+					Date = dat.Date.ToString("dd/MM/yyyy").Replace('-', '/'),
 					DepartmentID = dat.DepartmentID
 				});
 			}

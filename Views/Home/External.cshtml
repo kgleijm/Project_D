@@ -1,17 +1,47 @@
+@model double 
+
 @{
     ViewData["Title"] = "External Dashboard";
-    ViewData["Houses"] = 133;
+    // Verbruik van gemiddeld huis is 2714kWh per jaar.
+    // 2714 / 365 = 7.4
+    // https://www.milieucentraal.nl/energie-besparen/inzicht-in-je-energierekening/gemiddeld-energieverbruik/
+    double HouseDivider = 7.4; //dit is de waarde waardoor het gedeeld word. 
+
+    // Verbruik van gemiddeld ziekenhuisbed is 11.525
+    // 11.525 / 365 = 31.6
+    // https://www.milieubarometer.nl/voorbeelden/ziekenhuis/
+    double BedDivider = 31.6;
 }
+
+<script>
+    setInterval(() => {
+        let elemVisible = document.getElementById("huizen").offsetParent === null
+        if(elemVisible){
+            document.getElementById("huizen").classList.remove("d-none")
+            document.getElementById("bedden").classList.add("d-none")
+        } else {
+            document.getElementById("huizen").classList.add("d-none")
+            document.getElementById("bedden").classList.remove("d-none")
+        }
+    }, 5000)
+    
+
+</script>
 
 <div>
     <div class="row">
         <div class="col-sm-12 my-4">
-            <p class="text-center">
+            <p class="text-center" id="huizen">
                 <span class="display-4">Wij hebben dit jaar</span><br>
-                <span class="display-2"><strong>@ViewData["Houses"] aantal huizen</strong></span><br>
+                <span class="display-2"><strong>@(Math.Ceiling(Model/HouseDivider)) aantal huizen</strong></span><br>
                 <span class="display-4">aan energieverbruik bespaard</span><br />
                 <span><svg xmlns="http://www.w3.org/2000/svg" height="128px" viewBox="0 0 24 24" width="128px" fill="#000000"><path d="M0 0h24v24H0z" fill="none"/><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg></span>
             </p>
+            <p class="text-center d-none" id="bedden">
+                <span class="display-4">Wij hebben dit jaar</span><br>
+                <span class="display-2"><strong>@(Math.Ceiling(Model/BedDivider)) ziekenhuisbedden</strong></span><br>
+                <span class="display-4">aan energieverbruik bespaard</span><br />
+                <svg xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" height="128px" viewBox="0 0 24 24" width="128px" fill="#000000"><g><path d="M0,0h24v24H0V0z" fill="none"/></g><g><path d="M21,10.78V8c0-1.65-1.35-3-3-3h-4c-0.77,0-1.47,0.3-2,0.78C11.47,5.3,10.77,5,10,5H6C4.35,5,3,6.35,3,8v2.78 C2.39,11.33,2,12.12,2,13v6h2v-2h16v2h2v-6C22,12.12,21.61,11.33,21,10.78z M14,7h4c0.55,0,1,0.45,1,1v2h-6V8C13,7.45,13.45,7,14,7 z M5,8c0-0.55,0.45-1,1-1h4c0.55,0,1,0.45,1,1v2H5V8z M4,15v-2c0-0.55,0.45-1,1-1h14c0.55,0,1,0.45,1,1v2H4z"/></g></svg>            </p>
         </div>
     </div>
 </div>

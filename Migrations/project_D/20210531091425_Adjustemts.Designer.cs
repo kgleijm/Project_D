@@ -2,14 +2,16 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Project_D.Migrations.project_D
 {
     [DbContext(typeof(project_DContext))]
-    partial class project_DContextModelSnapshot : ModelSnapshot
+    [Migration("20210531091425_Adjustemts")]
+    partial class Adjustemts
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -34,9 +36,6 @@ namespace Project_D.Migrations.project_D
                         .HasColumnType("float");
 
                     b.Property<double>("EnergyConsumption")
-                        .HasColumnType("float");
-
-                    b.Property<double>("EnergyGenAdjustment")
                         .HasColumnType("float");
 
                     b.Property<double>("EnergyGenerated")
