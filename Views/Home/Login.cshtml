@@ -23,7 +23,7 @@
                 </form>
             </div>
             <script>
-                setInterval(() => {
+                setTimeout(() => { // Wait for the asp attributes to be built before JS code activates
                     const url = window.location.search;
                     const params = new URLSearchParams(url);
                     if (params.get("name") == "data") {
@@ -34,7 +34,7 @@
                         document.getElementById("data").classList.add("d-none")
                         document.getElementById("admin").classList.remove("d-none")
                     }
-                }, 50)
+                }, 5)
             </script>
             <a class="d-none" id="admin" asp-controller="Home" asp-action="Admin">Continue</a>
             <a class="" id="data" asp-controller="Data" asp-action="Index">Continue</a>
