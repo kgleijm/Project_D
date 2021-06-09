@@ -1,4 +1,5 @@
 @{
+
     ViewData["Title"] = "Admin Login Page";
 }
 
@@ -7,7 +8,7 @@
         <div class="col-sm-4 my-4">
             <div class="form-group">
                 <h5 class="">
-                    Access Admin Page
+                    Access Restricted Page
                 </h5><br>
                 <form>
                     <label for="password">Password</label>
@@ -16,14 +17,28 @@
                         <div class="input-group-append">
                             <input type="submit" value="Log in" class="btn btn-primary" />
                         </div>
-                        
+
                     </div>
-                    
+
                 </form>
             </div>
+            <script>
+                setInterval(() => {
+                    const url = window.location.search;
+                    const params = new URLSearchParams(url);
+                    if (params.get("name") == "data") {
+                        document.getElementById("data").classList.remove("d-none")
+                        document.getElementById("admin").classList.add("d-none")
+                    }
+                    else if (params.get("name") == "admin") {
+                        document.getElementById("data").classList.add("d-none")
+                        document.getElementById("admin").classList.remove("d-none")
+                    }
+                }, 50)
+            </script>
+            <a class="d-none" id="admin" asp-controller="Home" asp-action="Admin">Continue</a>
+            <a class="" id="data" asp-controller="Data" asp-action="Index">Continue</a>
 
-
-            <a asp-controller="Home" asp-action="Admin">FOR DEV: Continue</a>
         </div>
     </div>
 </div>

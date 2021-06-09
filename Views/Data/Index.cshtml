@@ -67,9 +67,9 @@
                 @Html.DisplayFor(modelItem => item.DepartmentID)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.DataID">Edit</a> |
+                <a asp-action="Edit" asp-route-redirect="Edit" asp-route-id="@item.DataID">Edit</a> | <!--Should be restricted access for admin only-->
                 <a asp-action="Details" asp-route-id="@item.DataID">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.DataID">Delete</a>
+                <a asp-action="Delete" asp-route-redirect="Delete" asp-route-id="@item.DataID">Delete</a> <!--Should be restricted access for admin only-->
             </td>
         </tr>
 }
