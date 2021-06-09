@@ -28,6 +28,7 @@
                     <th>Energieverbruik (kWh)</th>
                     <th>Gasverbruik (m^3)</th>
                     <th>Opgewekte energie (kW)</th>
+                    <th colspan="4"></th>
                     </thead>
                     @foreach (var data in Model.Item2)
                     {
@@ -38,19 +39,25 @@
                             <td>@data.EnergyConsumption</td>
                             <td>@data.GasConsumption</td>
                             <input typeof="text" name="keys" value="@(data.Date)" type="hidden" />
-                            <td>@data.EnergyGenerated + <input value="@(data.EnergyGenAdjustment)" name="adjustments" type="number" />   =   @(sum)</td>
+                            <td>@data.EnergyGenerated</td>
+                            <td> + </td>
+                            <td><input value="@(data.EnergyGenAdjustment)" name="adjustments" type="number" /></td>
+                            <td> = </td>
+                            <td>@(sum)</td>
                         </tr>
                     }
                     <tr>
-                        <th rowspan="1">Totaal:</th>
+                        <th colspan="1"><strong>Totaal:</strong></th>
                         <td>@Model.Item3.EnergyConsumption</td>
                         <td>@Model.Item3.GasConsumption</td>
+                        <td colspan="4"></td>
                         <td>@Model.Item3.EnergyGenerated</td>
                     </tr>
                 </table>
                 <button type="submit" class="btn btn-primary">Opslaan</button>
+                <button onclick="window.location.href = '/Admin/Export';" class="btn btn-primary">Exporteren</button>
             </form>
-            <button onclick="window.location.href = '/Admin/Export';" class="btn btn-primary">Exporteren</button>
+            
 
 
 
@@ -61,8 +68,8 @@
                 <table class="table">
                     <thead>
                     <th>Dag</th>
-                    <th>Energieverbruik (kWh)</th>
-                    <th>Gasverbruik (m^3)</th>
+                    <th colspan="5">Energieverbruik (kWh)</th>
+                    <th colspan="5">Gasverbruik (m^3)</th>
                     </thead>
                     @foreach (var data in Model.Item2)
                     {
@@ -72,21 +79,33 @@
                         <tr>
                             <td>@data.Date</td>
                             <input typeof="text" name="keys" value="@(data.Date)" type="hidden" />
-                            <td>@data.EnergyConsumption + <input value="@(data.EnergyAdjustment)" name="energyAdjustments" type="number" />   =   @(sum1)</td>
-                            <td>@data.GasConsumption +  <input value="@(data.GasAdjustment)" name="gasAdjustments" type="number" />   =   @(sum2)</td>
+                            <td>@data.EnergyConsumption</td>
+                            <td> + </td>
+                            <td><input value="@(data.EnergyAdjustment)" name="energyAdjustments" type="number" /></td>
+                            <td> = </td>
+                            <td>@(sum1)</td>
+                            <td>@data.GasConsumption</td>
+                            <td> + </td>
+                            <td><input value="@(data.GasAdjustment)" name="gasAdjustments" type="number" /></td>
+                            <td> = </td>
+                            <td>@(sum2)</td>
                         </tr>
                     }
                     <tr>
-                        <th rowspan="1">Totaal:</th>
-                        <td>@Model.Item3.EnergyConsumption</td>
-                        <td>@Model.Item3.GasConsumption</td>
+                        <th colspan="5"><strong>Totaal:</strong></th>
+                        <td colspan="5">@Model.Item3.EnergyConsumption</td>
+                        
+                        <td colspan="1">@Model.Item3.GasConsumption</td>
                     </tr>
                 </table>
                 <input type="hidden" / name="departmentId" value="@(Model.Item5.DepartmentID)">
                 <button type="submit" class="btn btn-primary">Opslaan</button>
+
+                @{string link = "/Admin/Export/" + Model.Item5.DepartmentID;}
+                
+                <button onclick="window.location.href = '@(link)';" class="btn btn-primary">Exporteren</button>
             </form>
-            string link = "/Admin/Export/" + Model.Item5.DepartmentID;
-            <button onclick="window.location.href = '@(link)';" class="btn btn-primary">Exporteren</button>
+            
         }
     </div>
 </div>
