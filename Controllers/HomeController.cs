@@ -238,7 +238,7 @@ namespace Project_D.Controllers
             }
             _context.SaveChanges();
 
-            return RedirectToAction("Admin/");
+            return RedirectToAction("Admin");
         }
 
         [HttpPost]
