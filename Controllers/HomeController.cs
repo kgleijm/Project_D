@@ -206,14 +206,15 @@ namespace Project_D.Controllers
                                {
                                    Date = g.Key,
                                    EnergyConsumption = g.Sum(ec => ec.EnergyConsumption),
+                                   EnergyAdjustment = g.Sum(ea => ea.EnergyAdjustment),
                                    GasConsumption = g.Sum(gc => gc.GasConsumption),
+                                   GasAdjustment = g.Sum(ga => ga.GasAdjustment),
                                    DepartmentID = id
                                }).ToList();
             Data total = new Data
             {
-                EnergyConsumption = (from d in data where d.DepartmentID == id select d.EnergyConsumption).Sum(),
-                GasConsumption = (from d in data where d.DepartmentID == id select d.GasConsumption).Sum(),
-                EnergyGenerated = (from d in data where d.DepartmentID == id select d.EnergyGenerated).Sum(),
+                EnergyConsumption = (from d in data where d.DepartmentID == id select d.EnergyConsumption).Sum() + (from d in data where d.DepartmentID == id select d.EnergyAdjustment).Sum(),
+                GasConsumption = (from d in data where d.DepartmentID == id select d.GasConsumption).Sum() + (from d in data where d.DepartmentID == id select d.GasAdjustment).Sum(),
             };
             List<Data> orderedData = DataWithDateTime.OrderedData(data);
             Department current = (from d in _context.Department
@@ -237,7 +238,28 @@ namespace Project_D.Controllers
             }
             _context.SaveChanges();
 
-            return RedirectToAction("Admin");
+            return RedirectToAction("Admin/");
+        }
+
+        [HttpPost]
+        public IActionResult EnergyAndGasAdjustments(int departmentId, string[] keys, int[] energyAdjustments, int[] gasAdjustments)
+        {
+            List<Data> data = _context.Data.ToList();
+            for (int i = 0; i < data.Count; i++)
+            {
+                int index = Array.IndexOf(keys, data[i].Date);
+                if (data[i].DepartmentID == departmentId && data[i].EnergyAdjustment != energyAdjustments[index])
+                {
+                    data[i].EnergyAdjustment = energyAdjustments[index];
+                }
+                if (data[i].DepartmentID == departmentId && data[i].GasAdjustment != gasAdjustments[index])
+                {
+                    data[i].GasAdjustment = gasAdjustments[index];
+                }
+            }
+            _context.SaveChanges();
+
+            return RedirectToAction("Admin", new { id = departmentId });
         }
 
         /*
@@ -292,19 +314,75 @@ namespace Project_D.Controllers
             dt.Rows.Add("TOTAAL:", total.EnergyConsumption, total.GasConsumption, "", "", total.EnergyGenerated);
 
             //convert the datatable to csv and return the file
-            string path = _env.WebRootPath + ".\\Content\\output.csv";
+            string path = _env.WebRootPath + ".\\Content\\Data-Totaal.csv";
             ToCSV(dt, path);
 
-            Response.Headers.Add("Content-Disposition", "inline; filename=output.csv");
-            return File("~/Content/output.csv", "tekst/csv", "Total.csv");
+            Response.Headers.Add("Content-Disposition", "inline; filename=Data-Totaal.csv");
+            return File("~/Content/Data-Totaal.csv", "tekst/csv");
         }
 
+        /*
+        Dag
+        Energieverbuik
+        Aanpassing energieverbruik
+        Totaal energieverbruik
+        Gasverbruik
+        Aanpassing gasverbruik
+        Totaal gasverbruik
+         */
 
         [Route("/Admin/Export/{id}")]
         public FileResult ExportData(int id)
         {
-            Response.Headers.Add("Content-Disposition", "inline; filename=output.csv");
-            return File("~/Content/output.xls", "tekst/csv", "file.csv");
+            //Create the datatable
+            List<Data> data = (from d in _context.Data
+                               where d.DepartmentID == id
+                               group d by d.Date into g
+                               select new Data
+                               {
+                                   Date = g.Key,
+                                   EnergyConsumption = g.Sum(ec => ec.EnergyConsumption),
+                                   EnergyAdjustment = g.Sum(ea => ea.EnergyAdjustment),
+                                   GasConsumption = g.Sum(gc => gc.GasConsumption),
+                                   GasAdjustment = g.Sum(ga => ga.GasAdjustment),
+                                   DepartmentID = id
+                               }).ToList();
+            Data total = new Data
+            {
+                EnergyConsumption = (from d in data where d.DepartmentID == id select d.EnergyConsumption).Sum() + (from d in data where d.DepartmentID == id select d.EnergyAdjustment).Sum(),
+                GasConsumption = (from d in data where d.DepartmentID == id select d.GasConsumption).Sum() + (from d in data where d.DepartmentID == id select d.GasAdjustment).Sum(),
+            };
+            List<Data> orderedData = DataWithDateTime.OrderedData(data);
+
+
+            DataTable dt = new DataTable();
+            DataColumn[] columns = new DataColumn[]
+            {
+                new DataColumn("Dag"),
+                new DataColumn("Energieverbruik"),
+                new DataColumn("Aanpassing energieverbruik"),
+                new DataColumn("Totaal energieverbruik"),
+                new DataColumn("Gasverbruik"),
+                new DataColumn("Aanpassing gasverbruik"),
+                new DataColumn("Totaal gasverbruik")
+            };
+            dt.Columns.AddRange(columns);
+
+            foreach (Data d in data)
+            {
+                dt.Rows.Add(d.Date, d.EnergyConsumption, d.EnergyAdjustment, (d.EnergyConsumption + d.EnergyAdjustment), d.GasConsumption, d.GasAdjustment, (d.GasConsumption + d.GasAdjustment));
+            }
+            string depName = (from d in _context.Department where d.DepartmentID == id select d.Name).ToList()[0];
+            dt.Rows.Add("TOTAAL -"+ depName+":", "", "", total.EnergyConsumption, "", "", total.GasConsumption);
+
+            //convert the datatable to csv and return the file
+
+            string path = _env.WebRootPath + ".\\Content\\Data-" + depName + ".csv";
+            ToCSV(dt, path);
+
+
+            Response.Headers.Add("Content-Disposition", "inline; filename=Data-"+ depName +".csv");
+            return File("~/Content/Data-" + depName + ".csv", "tekst/csv");
         }
 
         public static void ToCSV(DataTable dt, string path)
