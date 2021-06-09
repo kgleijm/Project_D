@@ -6,21 +6,20 @@
 
 <div>
     <div class="row">
-        @* <div class="col-sm-12 col-md-4">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">Statistieken</h5>
-                    <span class="card-text">Statistieken in een oogopslag</span>
-                </div>
-                <ul class="list-group list-group-flush">
-                    <li class="list-group-item">60/400 Lampen aan</li>
-                    <li class="list-group-item">60/400 Sensoren aan</li>
-                    <li class="list-group-item">60/400 Thermostaten aan</li>
-                </ul>
-            </div>
-        </div> *@
+        <div class="col-sm-12 col-md-4">
+            <p class="">
+                Departments
+                <br> <a href="/Admin">Totaal</a>
+                @foreach (var department in Model.Item1)
+                {
+                    //string link = "/Admin/" + department.DepartmentID;
+                    //<br> <a href=@link>@(department.DepartmentID). @(department.Name)  </a>
+                    <br><a>test</a>
+                }
+            </p>
+        </div>
 
-        <div class="col-sm-12 col-md-6 my-4">
+        <div class="col-sm-12 col-md-4 my-4">
             <div class="card">
                 <div class="card-body">
                     <h5 class="card-title">Energie verbruik</h5>
@@ -29,7 +28,7 @@
             </div>
         </div>
 
-        <div class="col-sm-12 col-md-6 my-4">
+        <div class="col-sm-12 col-md-4 my-4">
             <div class="card">
                 <div class="card-body">
                     <h5 class="card-title">Gas verbruik</h5>
@@ -41,7 +40,11 @@
     </div>
     <div class="row">
 
-        <div class="col-sm-12 col-md-6 my-4">
+        <div class="col-sm-12 col-md-4">
+
+        </div>
+
+        <div class="col-sm-12 col-md-4 my-4">
             <div class="card">
                 <div class="card-body">
                     <h5 class="card-title">Energie besparing</h5>
@@ -50,7 +53,7 @@
             </div>
         </div>
 
-        <div class="col-sm-12 col-md-6 my-4">
+        <div class="col-sm-12 col-md-4 my-4">
             <div class="card">
                 <div class="card-body">
                     <h5 class="card-title">Gas besparing</h5>
@@ -62,7 +65,7 @@
     </div>
 
     <div class="row">
-        <div class="col">
+        <div class="col offset-md-4">
             <h2>Opgewekte energie: 42kWh</h2>
         </div>
         
