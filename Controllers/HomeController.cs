@@ -41,7 +41,7 @@ namespace Project_D.Controllers
                         {
                             EnergyConsumption = 20.0,
                             GasConsumption = 10.0,
-                            Date = "18/05/2020",
+                            Date = "08/06/2020",
                             DepartmentID = _context.Department.ToList()[1].DepartmentID,
                             EnergyGenerated = 0.0,
                             GasAdjustment = 0.0,
@@ -53,7 +53,7 @@ namespace Project_D.Controllers
                         {
                             EnergyConsumption = 25.0,
                             GasConsumption = 15.0,
-                            Date = "19/05/2020",
+                            Date = "09/06/2020",
                             DepartmentID = _context.Department.ToList()[1].DepartmentID,
                             EnergyGenerated = 15.0,
                             GasAdjustment = 0.0,
@@ -65,7 +65,7 @@ namespace Project_D.Controllers
                         {
                             EnergyConsumption = 10.0,
                             GasConsumption = 15.0,
-                            Date = "18/05/2020",
+                            Date = "08/06/2020",
                             DepartmentID = _context.Department.ToList()[0].DepartmentID,
                             EnergyGenerated = 10.0,
                             GasAdjustment = 0.0,
@@ -77,7 +77,7 @@ namespace Project_D.Controllers
                         {
                             EnergyConsumption = 30.0,
                             GasConsumption = 30.0,
-                            Date = "19/05/2020",
+                            Date = "09/06/2020",
                             DepartmentID = _context.Department.ToList()[0].DepartmentID,
                             EnergyGenerated = 5.0,
                             GasAdjustment = 0.0,
@@ -89,7 +89,7 @@ namespace Project_D.Controllers
                         {
                             EnergyConsumption = 30.0,
                             GasConsumption = 20.0,
-                            Date = "18/05/2021",
+                            Date = "08/06/2021",
                             DepartmentID = _context.Department.ToList()[1].DepartmentID,
                             EnergyGenerated = 5.0,
                             GasAdjustment = 0.0,
@@ -101,7 +101,7 @@ namespace Project_D.Controllers
                         {
                             EnergyConsumption = 35.0,
                             GasConsumption = 25.0,
-                            Date = "19/05/2021",
+                            Date = "09/06/2021",
                             DepartmentID = _context.Department.ToList()[1].DepartmentID,
                             EnergyGenerated = 20.0,
                             GasAdjustment = 0.0,
@@ -113,7 +113,7 @@ namespace Project_D.Controllers
                         {
                             EnergyConsumption = 20.0,
                             GasConsumption = 10.0,
-                            Date = "18/05/2021",
+                            Date = "08/06/2021",
                             DepartmentID = _context.Department.ToList()[0].DepartmentID,
                             EnergyGenerated = 15.0,
                             GasAdjustment = 0.0,
@@ -125,7 +125,7 @@ namespace Project_D.Controllers
                         {
                             EnergyConsumption = 25.0,
                             GasConsumption = 15.0,
-                            Date = "19/05/2021",
+                            Date = "09/06/2021",
                             DepartmentID = _context.Department.ToList()[0].DepartmentID,
                             EnergyGenerated = 10.0,
                             GasAdjustment = 0.0,
@@ -156,29 +156,148 @@ namespace Project_D.Controllers
                                    EnergyGenerated = g.Average(eg => eg.EnergyGenerated),
                                    EnergyGenAdjustment = g.Average(eg => eg.EnergyGenAdjustment)
                                }).ToList();
-            List<Data> orderedData = DataWithDateTime.OrderedData(data);
-            List<Data> last7Days;
-            if (orderedData.Count > 7)
-                last7Days = orderedData.GetRange(orderedData.Count - 7, 7);
-            else
-                last7Days = orderedData;
+            List<DataWithDateTime> orderedData = DataWithDateTime.WithDateTime(data);
+
+            //select last 7 days
+            List<DateTime> dateTimes = Enumerable.Range(0, 7)
+                                        .Select(i => DateTime.Now.Date.AddDays(-i))
+                                        .ToList();
+            List<DataWithDateTime> last7Days = new List<DataWithDateTime>();
+            for (int i = (orderedData.Count - 1); i >= 0; i--)
+            {
+                if (last7Days.Count != 7 && dateTimes.Contains(orderedData[i].Date)) {
+                    last7Days.Add(orderedData[i]);
+                } else if (last7Days.Count >= 7)
+                {
+                    break;
+                }
+            }
+            last7Days = (from d in last7Days
+                         orderby d.Date ascending
+                         select d).ToList();
             List<string> days = new List<string>();
             List<int> gasData = new List<int>();
             List<int> electricityData = new List<int>();
             foreach (var day in last7Days)
             {
-                days.Add(day.Date);
+                days.Add(day.Date.ToString("dd/MM/yyyy").Replace('-', '/'));
                 gasData.Add((int)(day.GasConsumption + day.GasAdjustment));
                 electricityData.Add((int)(day.EnergyConsumption + day.EnergyAdjustment));
             }
-            Tuple<string, string, string, string, string> tuple = new Tuple<string, string, string, string, string>(JsonSerializer.Serialize(days), JsonSerializer.Serialize(gasData), JsonSerializer.Serialize(electricityData), JsonSerializer.Serialize(gasData), JsonSerializer.Serialize(electricityData));
+
+            //select last 7 days from 1 year ago
+            DateTime yearAgo = DateTime.Now.Date.AddDays(-365);
+            List<DateTime> dateTimes1Yago = Enumerable.Range(0, 7)
+                                        .Select(i => yearAgo.AddDays(-i))
+                                        .ToList();
+            List<DataWithDateTime> last7Days1yearAgo = new List<DataWithDateTime>();
+            for (int i = 0; i < orderedData.Count; i++)
+            {
+                if (last7Days1yearAgo.Count != 7 && dateTimes1Yago.Contains(orderedData[i].Date))
+                {
+                    last7Days1yearAgo.Add(orderedData[i]);
+                } else if (last7Days1yearAgo.Count >= 7)
+                {
+                    break;
+                }
+            }
+            last7Days1yearAgo = (from d in last7Days1yearAgo
+                                 orderby d.Date ascending
+                                 select d).ToList();
+            //besparingen (een verandering in de min word als positief weergeven)
+            List<int> gasSavings = new List<int>();
+            List<int> electricitySavings = new List<int>();
+            for (int i = 0; i < last7Days1yearAgo.Count; i++)
+            {
+                gasSavings.Add((int)(last7Days1yearAgo[i].GasConsumption + last7Days1yearAgo[i].GasAdjustment) - gasData[i]);
+                electricitySavings.Add((int)(last7Days1yearAgo[i].EnergyConsumption + last7Days1yearAgo[i].EnergyAdjustment) - electricityData[i]);
+            }
+            //energy generations
+            double gen = ((from d in _context.Data group d by d.Date into g select g.Average(eg => eg.EnergyGenerated)).Sum() +
+                                    (from d in _context.Data group d by d.Date into g select g.Average(eg => eg.EnergyGenAdjustment)).Sum());
+            Tuple<string, string, string, string, string, double, Tuple<List<project_D.Models.Department>, int>> tuple = new Tuple<string, string, string, string, string, double, Tuple<List<project_D.Models.Department>, int>>
+                (JsonSerializer.Serialize(days), JsonSerializer.Serialize(electricityData), JsonSerializer.Serialize(gasData), JsonSerializer.Serialize(electricitySavings), JsonSerializer.Serialize(gasSavings), gen, new Tuple<List<Department>, int>(_context.Department.ToList(), -1));
             return View(tuple);
         }
 
         [Route("/{id}")]
         public IActionResult Index(int id)
         {
-            return View();
+            List<Data> data = (from d in _context.Data
+                               where d.DepartmentID == id
+                               group d by d.Date into g
+                               select new Data
+                               {
+                                   Date = g.Key,
+                                   EnergyConsumption = g.Sum(ec => ec.EnergyConsumption),
+                                   EnergyAdjustment = g.Sum(ea => ea.EnergyAdjustment),
+                                   GasConsumption = g.Sum(gc => gc.GasConsumption),
+                                   GasAdjustment = g.Sum(ga => ga.GasAdjustment),
+                                   DepartmentID = id
+                               }).ToList();
+            List<DataWithDateTime> orderedData = DataWithDateTime.WithDateTime(data);
+
+            //select last 7 days
+            List<DateTime> dateTimes = Enumerable.Range(0, 7)
+                                        .Select(i => DateTime.Now.Date.AddDays(-i))
+                                        .ToList();
+            List<DataWithDateTime> last7Days = new List<DataWithDateTime>();
+            for (int i = (orderedData.Count - 1); i >= 0; i--)
+            {
+                if (last7Days.Count != 7 && dateTimes.Contains(orderedData[i].Date))
+                {
+                    last7Days.Add(orderedData[i]);
+                } else if (last7Days.Count >= 7)
+                {
+                    break;
+                }
+            }
+            last7Days = (from d in last7Days
+                         orderby d.Date ascending
+                         select d).ToList();
+            List<string> days = new List<string>();
+            List<int> gasData = new List<int>();
+            List<int> electricityData = new List<int>();
+            foreach (var day in last7Days)
+            {
+                days.Add(day.Date.ToString("dd/MM/yyyy").Replace('-', '/'));
+                gasData.Add((int)(day.GasConsumption + day.GasAdjustment));
+                electricityData.Add((int)(day.EnergyConsumption + day.EnergyAdjustment));
+            }
+
+            //select last 7 days from 1 year ago
+            DateTime yearAgo = DateTime.Now.Date.AddDays(-365);
+            List<DateTime> dateTimes1Yago = Enumerable.Range(0, 7)
+                                        .Select(i => yearAgo.AddDays(-i))
+                                        .ToList();
+            List<DataWithDateTime> last7Days1yearAgo = new List<DataWithDateTime>();
+            for (int i = 0; i < orderedData.Count; i++)
+            {
+                if (last7Days1yearAgo.Count != 7 && dateTimes1Yago.Contains(orderedData[i].Date))
+                {
+                    last7Days1yearAgo.Add(orderedData[i]);
+                } else if (last7Days1yearAgo.Count >= 7)
+                {
+                    break;
+                }
+            }
+            last7Days1yearAgo = (from d in last7Days1yearAgo
+                                 orderby d.Date ascending
+                                 select d).ToList();
+            //besparingen (een verandering in de min word als positief weergeven)
+            List<int> gasSavings = new List<int>();
+            List<int> electricitySavings = new List<int>();
+            for (int i = 0; i < last7Days1yearAgo.Count; i++)
+            {
+                gasSavings.Add((int)(last7Days1yearAgo[i].GasConsumption + last7Days1yearAgo[i].GasAdjustment) - gasData[i]);
+                electricitySavings.Add((int)(last7Days1yearAgo[i].EnergyConsumption + last7Days1yearAgo[i].EnergyAdjustment) - electricityData[i]);
+            }
+            //energy generations
+            double gen = ((from d in _context.Data group d by d.Date into g select g.Average(eg => eg.EnergyGenerated)).Sum() +
+                                    (from d in _context.Data group d by d.Date into g select g.Average(eg => eg.EnergyGenAdjustment)).Sum());
+            Tuple<string, string, string, string, string, double, Tuple<List<project_D.Models.Department>, int>> tuple = new Tuple<string, string, string, string, string, double, Tuple<List<project_D.Models.Department>, int>>
+                (JsonSerializer.Serialize(days), JsonSerializer.Serialize(electricityData), JsonSerializer.Serialize(gasData), JsonSerializer.Serialize(electricitySavings), JsonSerializer.Serialize(gasSavings), gen, new Tuple<List<Department>, int>(_context.Department.ToList(), id));
+            return View(tuple);
         }
 
         [Route("/Privacy")]
