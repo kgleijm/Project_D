@@ -54,5 +54,28 @@ namespace Project_D.Classes
 			}
 			return orderedData;
 		}
+
+		public static List<DataWithDateTime> WithDateTime (List<Data> unorderedData)
+        {
+			List<DataWithDateTime> unorderedWithDateTime = new List<DataWithDateTime>();
+			foreach (Data dat in unorderedData)
+			{
+				unorderedWithDateTime.Add(new DataWithDateTime
+				{
+					EnergyConsumption = dat.EnergyConsumption,
+					GasConsumption = dat.GasConsumption,
+					EnergyGenerated = dat.EnergyGenerated,
+					GasAdjustment = dat.GasAdjustment,
+					EnergyAdjustment = dat.EnergyAdjustment,
+					EnergyGenAdjustment = dat.EnergyGenAdjustment,
+					Date = DateTime.ParseExact(dat.Date, "dd/MM/yyyy", CultureInfo.InvariantCulture),
+					DepartmentID = dat.DepartmentID
+				});
+			}
+			List<DataWithDateTime> orderedWithDateTime = (from data in unorderedWithDateTime
+														  orderby data.Date ascending
+														  select data).ToList();
+			return orderedWithDateTime;
+		}
 	}
 }

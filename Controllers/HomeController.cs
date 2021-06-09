@@ -10,6 +10,9 @@ using Project_D.Classes;
 using System.Data;
 using System.IO;
 using Microsoft.AspNetCore.Hosting;
+using System.Globalization;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace Project_D.Controllers
 {
@@ -18,7 +21,7 @@ namespace Project_D.Controllers
         private readonly ILogger<HomeController> _logger;
         private readonly project_DContext _context;
         private IWebHostEnvironment _env;
-
+        private DateTimeFormatInfo cultureInfo = new CultureInfo("nl-NL").DateTimeFormat;
         public HomeController(ILogger<HomeController> logger, project_DContext context, IWebHostEnvironment env)
         {
             _logger = logger;
@@ -142,6 +145,40 @@ namespace Project_D.Controllers
 
         [Route("/")]
         public IActionResult Index()
+        {
+            List<Data> data = (from d in _context.Data
+                               group d by d.Date into g
+                               select new Data
+                               {
+                                   Date = g.Key,
+                                   EnergyConsumption = (g.Sum(ec => ec.EnergyConsumption) + g.Sum(ea => ea.EnergyAdjustment)),
+                                   GasConsumption = (g.Sum(gc => gc.GasConsumption) + g.Sum(ga => ga.GasAdjustment)),
+                                   EnergyGenerated = g.Average(eg => eg.EnergyGenerated),
+                                   EnergyGenAdjustment = g.Average(eg => eg.EnergyGenAdjustment)
+                               }).ToList();
+            List<DataWithDateTime> orderedData = DataWithDateTime.WithDateTime(data);
+            List<DataWithDateTime> last7Days;
+            if (orderedData.Count > 7)
+                last7Days = orderedData.GetRange(orderedData.Count - 7, 7);
+            else
+                last7Days = orderedData;
+            List<string> days = new List<string>();
+            List<int> gasData = new List<int>();
+            List<int> electricityData = new List<int>();
+            foreach (var day in last7Days)
+            {
+                DayOfWeek dayOfWeek = day.Date.DayOfWeek;
+                string abbreviation = cultureInfo.GetAbbreviatedDayName(dayOfWeek);
+                days.Add(abbreviation);
+                gasData.Add((int)(day.GasConsumption + day.GasAdjustment));
+                electricityData.Add((int)(day.EnergyConsumption + day.EnergyAdjustment));
+            }
+            Tuple<string, string, string> tuple = new Tuple<string, string, string>(JsonSerializer.Serialize(days), JsonSerializer.Serialize(days), JsonSerializer.Serialize(days));
+            return View(tuple);
+        }
+
+        [Route("/{id}")]
+        public IActionResult Index(int id)
         {
             return View();
         }
