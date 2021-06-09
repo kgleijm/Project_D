@@ -1,25 +1,25 @@
-﻿@model Tuple<string, string, string> 
+﻿@model Tuple<string, string, string, string, string> 
 @{
     ViewData["Title"] = "Home Page";
 }
+<!-- days, energie, gas, energieBesparing, gasBesparing -->
 
 <div>
     <div class="row">
-        @* <div class="col-sm-12 col-md-4">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">Statistieken</h5>
-                    <span class="card-text">Statistieken in een oogopslag</span>
-                </div>
-                <ul class="list-group list-group-flush">
-                    <li class="list-group-item">60/400 Lampen aan</li>
-                    <li class="list-group-item">60/400 Sensoren aan</li>
-                    <li class="list-group-item">60/400 Thermostaten aan</li>
-                </ul>
-            </div>
-        </div> *@
+        <div class="col-sm-12 col-md-4">
+            <p class="">
+                Departments
+                <br> <a href="/Admin">Totaal</a>
+                @foreach (var department in Model.Item1)
+                {
+                    //string link = "/Admin/" + department.DepartmentID;
+                    //<br> <a href=@link>@(department.DepartmentID). @(department.Name)  </a>
+                    <br><a>test</a>
+                }
+            </p>
+        </div>
 
-        <div class="col-sm-12 col-md-6 my-4">
+        <div class="col-sm-12 col-md-4 my-4">
             <div class="card">
                 <div class="card-body">
                     <h5 class="card-title">Energie verbruik</h5>
@@ -28,7 +28,7 @@
             </div>
         </div>
 
-        <div class="col-sm-12 col-md-6 my-4">
+        <div class="col-sm-12 col-md-4 my-4">
             <div class="card">
                 <div class="card-body">
                     <h5 class="card-title">Gas verbruik</h5>
@@ -40,7 +40,11 @@
     </div>
     <div class="row">
 
-        <div class="col-sm-12 col-md-6 my-4">
+        <div class="col-sm-12 col-md-4">
+
+        </div>
+
+        <div class="col-sm-12 col-md-4 my-4">
             <div class="card">
                 <div class="card-body">
                     <h5 class="card-title">Energie besparing</h5>
@@ -49,7 +53,7 @@
             </div>
         </div>
 
-        <div class="col-sm-12 col-md-6 my-4">
+        <div class="col-sm-12 col-md-4 my-4">
             <div class="card">
                 <div class="card-body">
                     <h5 class="card-title">Gas besparing</h5>
@@ -61,21 +65,33 @@
     </div>
 
     <div class="row">
-        <div class="col">
+        <div class="col offset-md-4">
             <h2>Opgewekte energie: 42kWh</h2>
         </div>
         
     </div>
 </div>
 <script>
+    let dagen = @Html.Raw(Json.Serialize(@Model.Item1));
+    let energie = @Html.Raw(Json.Serialize(@Model.Item2));
+    let gas = @Html.Raw(Json.Serialize(@Model.Item3));
+    let energieBesparing = @Html.Raw(Json.Serialize(@Model.Item4));
+    let gasBesparing = @Html.Raw(Json.Serialize(@Model.Item5));
+    dagen = JSON.parse(dagen)
+    energie = JSON.parse(energie)
+    gas = JSON.parse(gas)
+    energieBesparing = JSON.parse(energieBesparing)
+    gasBesparing = JSON.parse(gasBesparing)
+
+    // Charts
     var ctx = document.getElementById('myChart').getContext('2d');
     var myChart = new Chart(ctx, {
-    type: 'bar',
+    type: 'line',
     data: {
-        labels: ['Ma', 'Di', 'Wo', 'Do', 'Vr', 'Za', 'Zo'],
+        labels: dagen,
         datasets: [{
-            label: 'Lampen per dag',
-            data: [12, 19, 3, 5, 2, 3, 5],
+            label: 'Energie Verbruik',
+            data: energie,
             backgroundColor: [
                 'rgba(255, 99, 132, 0.2)',
                 'rgba(54, 162, 235, 0.2)',
@@ -111,10 +127,10 @@ var ctx = document.getElementById('myChart2').getContext('2d');
     var myChart = new Chart(ctx, {
     type: 'line',
     data: {
-        labels: ['Ma', 'Di', 'Wo', 'Do', 'Vr', 'Za', 'Zo'],
+        labels: dagen,
         datasets: [{
-            label: 'Lampen per dag',
-            data: [12, 11, 7, 4, 6, 4, 7],
+            label: 'Gas Verbruik',
+            data: gas,
             backgroundColor: [
                 'rgba(255, 99, 132, 0.2)',
                 'rgba(54, 162, 235, 0.2)',
@@ -150,10 +166,10 @@ var ctx = document.getElementById('myChart3').getContext('2d');
     var myChart = new Chart(ctx, {
     type: 'line',
     data: {
-        labels: ['Ma', 'Di', 'Wo', 'Do', 'Vr', 'Za', 'Zo'],
+        labels: dagen,
         datasets: [{
-            label: 'Lampen per dag',
-            data: [12, 11, 7, 4, 6, 4, 7],
+            label: 'Energie Besparing',
+            data: energieBesparing,
             backgroundColor: [
                 'rgba(255, 99, 132, 0.2)',
                 'rgba(54, 162, 235, 0.2)',
@@ -189,10 +205,10 @@ var ctx = document.getElementById('myChart4').getContext('2d');
     var myChart = new Chart(ctx, {
     type: 'line',
     data: {
-        labels: ['Ma', 'Di', 'Wo', 'Do', 'Vr', 'Za', 'Zo'],
+        labels: dagen,
         datasets: [{
-            label: 'Lampen per dag',
-            data: [12, 11, 7, 4, 6, 4, 7],
+            label: 'Gas Besparing',
+            data: gasBesparing,
             backgroundColor: [
                 'rgba(255, 99, 132, 0.2)',
                 'rgba(54, 162, 235, 0.2)',

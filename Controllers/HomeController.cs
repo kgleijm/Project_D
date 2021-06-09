@@ -156,8 +156,8 @@ namespace Project_D.Controllers
                                    EnergyGenerated = g.Average(eg => eg.EnergyGenerated),
                                    EnergyGenAdjustment = g.Average(eg => eg.EnergyGenAdjustment)
                                }).ToList();
-            List<DataWithDateTime> orderedData = DataWithDateTime.WithDateTime(data);
-            List<DataWithDateTime> last7Days;
+            List<Data> orderedData = DataWithDateTime.OrderedData(data);
+            List<Data> last7Days;
             if (orderedData.Count > 7)
                 last7Days = orderedData.GetRange(orderedData.Count - 7, 7);
             else
@@ -167,13 +167,11 @@ namespace Project_D.Controllers
             List<int> electricityData = new List<int>();
             foreach (var day in last7Days)
             {
-                DayOfWeek dayOfWeek = day.Date.DayOfWeek;
-                string abbreviation = cultureInfo.GetAbbreviatedDayName(dayOfWeek);
-                days.Add(abbreviation);
+                days.Add(day.Date);
                 gasData.Add((int)(day.GasConsumption + day.GasAdjustment));
                 electricityData.Add((int)(day.EnergyConsumption + day.EnergyAdjustment));
             }
-            Tuple<string, string, string> tuple = new Tuple<string, string, string>(JsonSerializer.Serialize(days), JsonSerializer.Serialize(electricityData), JsonSerializer.Serialize(gasData));
+            Tuple<string, string, string, string, string> tuple = new Tuple<string, string, string, string, string>(JsonSerializer.Serialize(days), JsonSerializer.Serialize(gasData), JsonSerializer.Serialize(electricityData), JsonSerializer.Serialize(gasData), JsonSerializer.Serialize(electricityData));
             return View(tuple);
         }
 
