@@ -15,7 +15,8 @@ namespace Project_D.Migrations.project_D
                     EnergyConsumption = table.Column<float>(type: "float", nullable: false),
                     GasConsumption = table.Column<float>(type: "float", nullable: false),
                     EnergyGenerated = table.Column<float>(type: "float", nullable: false),
-                    GasGenerated = table.Column<float>(type: "float", nullable: false),
+                    EnergyGenAdjustment = table.Column<float>(type: "float", nullable: false),
+                    EnergyAdjustment = table.Column<float>(type: "float", nullable: false),
                     Date = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     DepartmentID = table.Column<int>(type: "int", nullable: false)
                 },
