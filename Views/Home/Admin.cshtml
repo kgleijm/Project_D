@@ -25,9 +25,9 @@
                 <table class="table">
                     <thead class="">
                     <th>Dag</th>
-                    <th>Energieverbruik</th>
-                    <th>Gasverbruik</th>
-                    <th>Opgewekte energie</th>
+                    <th>Energieverbruik (kWh)</th>
+                    <th>Gasverbruik (m^3)</th>
+                    <th>Opgewekte energie (kW)</th>
                     </thead>
                     @foreach (var data in Model.Item2)
                     {
@@ -56,26 +56,37 @@
 
         } else
         {
-            <table class="table">
-                <thead>
-                <th>Dag</th>
-                <th>Energieverbruik</th>
-                <th>Gasverbruik</th>
-                </thead>
-                @foreach (var data in Model.Item2)
-                {
-                    //show al data
-            <tr>
-                <td>@data.Date</td>
-                <td>@data.EnergyConsumption</td>
-                <td>@data.GasConsumption</td>
-            </tr>}
-                <tr>
-                    <th rowspan="1">Totaal:</th>
-                    <td>@Model.Item3.EnergyConsumption</td>
-                    <td>@Model.Item3.GasConsumption</td>
-                </tr>
-            </table>
+            <h6>@(Model.Item5.Name)</h6>
+            <form asp-action="EnergyAndGasAdjustments">
+                <table class="table">
+                    <thead>
+                    <th>Dag</th>
+                    <th>Energieverbruik (kWh)</th>
+                    <th>Gasverbruik (m^3)</th>
+                    </thead>
+                    @foreach (var data in Model.Item2)
+                    {
+                        double sum1 = data.EnergyConsumption + data.EnergyAdjustment;
+                        double sum2 = data.GasConsumption + data.GasAdjustment;
+                        //show al data
+                        <tr>
+                            <td>@data.Date</td>
+                            <input typeof="text" name="keys" value="@(data.Date)" type="hidden" />
+                            <td>@data.EnergyConsumption + <input value="@(data.EnergyAdjustment)" name="energyAdjustments" type="number" />   =   @(sum1)</td>
+                            <td>@data.GasConsumption +  <input value="@(data.GasAdjustment)" name="gasAdjustments" type="number" />   =   @(sum2)</td>
+                        </tr>
+                    }
+                    <tr>
+                        <th rowspan="1">Totaal:</th>
+                        <td>@Model.Item3.EnergyConsumption</td>
+                        <td>@Model.Item3.GasConsumption</td>
+                    </tr>
+                </table>
+                <input type="hidden" / name="departmentId" value="@(Model.Item5.DepartmentID)">
+                <button type="submit" class="btn btn-primary">Opslaan</button>
+            </form>
+            string link = "/Admin/Export/" + Model.Item5.DepartmentID;
+            <button onclick="window.location.href = '@(link)';" class="btn btn-primary">Exporteren</button>
         }
     </div>
 </div>
