@@ -173,7 +173,7 @@ namespace Project_D.Controllers
                 gasData.Add((int)(day.GasConsumption + day.GasAdjustment));
                 electricityData.Add((int)(day.EnergyConsumption + day.EnergyAdjustment));
             }
-            Tuple<string, string, string> tuple = new Tuple<string, string, string>(JsonSerializer.Serialize(days), JsonSerializer.Serialize(days), JsonSerializer.Serialize(days));
+            Tuple<string, string, string> tuple = new Tuple<string, string, string>(JsonSerializer.Serialize(days), JsonSerializer.Serialize(electricityData), JsonSerializer.Serialize(gasData));
             return View(tuple);
         }
 
