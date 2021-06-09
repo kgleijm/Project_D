@@ -6,13 +6,8 @@ namespace Project_D.Migrations.project_D
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.RenameColumn(
-                name: "GasGenerated",
-                table: "Data",
-                newName: "GasAdjustment");
-
             migrationBuilder.AddColumn<double>(
-                name: "EnergyAdjustment",
+                name: "GasAdjustment",
                 table: "Data",
                 type: "float",
                 nullable: false,
@@ -21,14 +16,7 @@ namespace Project_D.Migrations.project_D
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropColumn(
-                name: "EnergyAdjustment",
-                table: "Data");
 
-            migrationBuilder.RenameColumn(
-                name: "GasAdjustment",
-                table: "Data",
-                newName: "GasGenerated");
         }
     }
 }

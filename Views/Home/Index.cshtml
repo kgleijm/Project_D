@@ -1,20 +1,33 @@
-﻿@model Tuple<string, string, string, string, string> 
+﻿@model Tuple<string, string, string, string, string, double, Tuple<List<project_D.Models.Department>, int>> 
 @{
     ViewData["Title"] = "Home Page";
 }
 <!-- days, energie, gas, energieBesparing, gasBesparing -->
 
 <div>
+    @if (Model.Item7.Item2 == -1)
+    {
+
+        <h6 class="col offset-md-4">Totaal</h6>
+    } else
+    {
+        foreach (var dep in Model.Item7.Item1)
+        {
+            if (dep.DepartmentID == Model.Item7.Item2)
+            {
+                <h6 class="col offset-md-4">@dep.Name</h6>
+            }
+        }
+    }
     <div class="row">
         <div class="col-sm-12 col-md-4">
             <p class="">
                 Departments
-                <br> <a href="/Admin">Totaal</a>
-                @foreach (var department in Model.Item1)
+                <br> <a href="/">Totaal</a>
+                @foreach (var department in Model.Item7.Item1)
                 {
-                    //string link = "/Admin/" + department.DepartmentID;
-                    //<br> <a href=@link>@(department.DepartmentID). @(department.Name)  </a>
-                    <br><a>test</a>
+                    string link = "/" + department.DepartmentID;
+                    <br><a href=@link>@(department.DepartmentID). @(department.Name) </a>
                 }
             </p>
         </div>
@@ -64,12 +77,14 @@
 
     </div>
 
-    <div class="row">
-        <div class="col offset-md-4">
-            <h2>Opgewekte energie: 42kWh</h2>
-        </div>
-        
-    </div>
+    @if (Model.Item7.Item2 == -1)
+    {
+        <div class="row">
+            <div class="col offset-md-4">
+                <h2>Opgewekte energie: @Model.Item6</h2>
+            </div>
+
+        </div>}
 </div>
 <script>
     let dagen = @Html.Raw(Json.Serialize(@Model.Item1));
