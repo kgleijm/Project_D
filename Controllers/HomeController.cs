@@ -472,7 +472,7 @@ namespace Project_D.Controllers
             ToCSV(dt, path);
 
             Response.Headers.Add("Content-Disposition", "inline; filename=Data-Totaal.csv");
-            return File("~/Content/Data-Totaal.csv", "tekst/csv");
+            return File("~/Content/Data-Totaal.csv", "tekst/csv", "Data-totaal.csv");
         }
 
         /*
@@ -536,7 +536,7 @@ namespace Project_D.Controllers
 
 
             Response.Headers.Add("Content-Disposition", "inline; filename=Data-"+ depName +".csv");
-            return File("~/Content/Data-" + depName + ".csv", "tekst/csv");
+            return File("~/Content/Data-" + depName + ".csv", "tekst/csv", "Data-" + depName + ".csv");
         }
 
         public static void ToCSV(DataTable dt, string path)

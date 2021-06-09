@@ -55,9 +55,9 @@
                     </tr>
                 </table>
                 <button type="submit" class="btn btn-primary">Opslaan</button>
-                <button onclick="window.location.href = '/Admin/Export';" class="btn btn-primary">Exporteren</button>
             </form>
-            
+            <button onclick="window.location.href = '/Admin/Export';" class="btn btn-primary">Exporteren</button>
+
 
 
 
@@ -94,7 +94,7 @@
                     <tr>
                         <th colspan="5"><strong>Totaal:</strong></th>
                         <td colspan="5">@Model.Item3.EnergyConsumption</td>
-                        
+
                         <td colspan="1">@Model.Item3.GasConsumption</td>
                     </tr>
                 </table>
@@ -102,10 +102,10 @@
                 <button type="submit" class="btn btn-primary">Opslaan</button>
 
                 @{string link = "/Admin/Export/" + Model.Item5.DepartmentID;}
-                
-                <button onclick="window.location.href = '@(link)';" class="btn btn-primary">Exporteren</button>
+
             </form>
-            
+            <button onclick="window.location.href = '@(link)';" class="btn btn-primary">Exporteren</button>
+
         }
     </div>
 </div>

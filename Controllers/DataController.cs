@@ -20,6 +20,7 @@ namespace Project_D.Controllers
         }
 
         // GET: Data
+        [Route("/Data")]
         public async Task<IActionResult> Index()
         {
             return View(await _context.Data.ToListAsync());
